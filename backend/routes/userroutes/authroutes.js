@@ -6,16 +6,7 @@ const fetchuser = require("../../middleware/fetchuser");
 
 const multer = require("multer");
 
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
 
-        callback(null, "/home/anonymous-kashmiri/internship/atteandance/public/avatars/");
-    },
-    filename: (req, file, callback) => {
-        callback(null, file.originalname);
-    }
-})
-const upload = multer({ storage: storage });
 
 
 const jwtsecret = "hello@";
@@ -25,27 +16,23 @@ const jwtsecret = "hello@";
 
 
 //signup route
-router.post("/signup", upload.single("avatar"), async (req, res) => {
+router.post("/signup", async (req, res) => {
 
     //object destructuring
 
     const { name, email, password, } = req.body;
 
     try {
-
-        let imagename = req.file.originalname;
-
-
-
         // checking if the email already exsists
 
 
         const user = await UserModel.findOne({ email });
+
         if (!user) {
-            await UserModel.create({ name, email, password, avatar: imagename })
+            await UserModel.create({ name, email, password })
                 .then(res.send({ status: "success", msg: "User Created" }))
                 .catch((error) => {
-                    res.status(400).send("some error occured " + error);
+                    console.log(error);
                 });
         }
         else {
@@ -56,30 +43,6 @@ router.post("/signup", upload.single("avatar"), async (req, res) => {
         console.log(error);
 
     }
-});
-router.post("/updateavatar", fetchuser, upload.single("avatar"), async (req, res) => {
-
-    //object destructuring
-
-    const id = req.user.id;
-
-    const avatar = req.file.originalname;
-
-
-    try {
-
-
-        const r = await UserModel.findByIdAndUpdate(id, { avatar: avatar });
-        console.log(r);
-        res.send(r);
-        console.log(r.avatar);
-
-    } catch (error) {
-        console.log(error);
-
-    }
-
-
 });
 
 //Sign in route for Student
@@ -137,7 +100,7 @@ router.get("/userdetails/:id", async (req, res) => {
     const userid = req.params.id;
     try {
 
-      
+
         const user = await UserModel.findById(userid).select("-password");
         if (!user) {
             res.send("No user is found for this id")

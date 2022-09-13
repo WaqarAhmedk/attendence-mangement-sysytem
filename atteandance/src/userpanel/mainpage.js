@@ -12,45 +12,15 @@ import { DialogContent } from '@mui/material';
 export default function Mainpage() {
     const [name, setName] = useState("");
     const [dialogmsg, setDialogmsg] = useState("");
-    const [imagepath, setImagepath] = useState("IMG-20220102-WA0015.jpg");
 
     const data = useLocation();
     const authtoken = data.state.authtoken;
 
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [openform, setOpenform] = useState(false);
-    const [avatar, setavatar] = useState("");
 
-    const handleClickOpenform = () => {
-        setOpenform(true);
-    };
-
-    const handleCloseform = (event) => {
-        event.preventDefault();
-        
-        
-        const formdata = new FormData();
-        formdata.append("avatar", avatar);
-        axios.post("/updateavatar",formdata,{
-               headers: {
-                    "AuthToken": authtoken
-                },
-                
-            }).then((res) => {
-              
-
-
-            })
-            .catch(err => console.error(err))
-
-
-
-
-
-        setOpenform(false);
-
-    };
+ 
+ 
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -74,8 +44,6 @@ export default function Mainpage() {
                 if (res.status == 200 && res.data != "") {
                     setName(res.data.name);
 
-                    setImagepath(res.data.avatar);
-                    console.log(avatar);
 
 
 
@@ -116,42 +84,10 @@ export default function Mainpage() {
     return (
         <>
 
-            <Dialog
-                open={openform}
-                onClose={handleCloseform}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Select your image
-                </DialogTitle>
-                <DialogContent>
-                    <form encType='multipart/form-data'>
-                        <input type="file" onChange={(e)=>{
-                            setavatar(e.target.files[0]);
-                        }} />
-                    </form>
-                </DialogContent>
-
-                <DialogActions>
-
-                    <Button onClick={handleCloseform} autoFocus>
-                        Submit
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-
-
-
-
-            <div className='navbar'>
-                <img height={"50px"} src={require("../images/logo.png")} />
-                <div className='profile-div' onClick={handleClickOpenform}>
-                    {
-                        console.log(imagepath)
-                    }
-                    <img className="rounded-circle" width={"50px"} height={"50px"} src={require("../../public/avatars/" + imagepath)} />
+         
+   <div className='navbar'>
+                <div className='profile-div' >
+                   
                     <span >{name}</span>
 
                 </div>

@@ -11,7 +11,7 @@ const jwtsecret = "adminsecret";
 router.post("/admin/signup", async (req, res) => {
 
 
-    const user = await adminmodel.create({ email: "waqar@gmail.com", password: "12345" });
+    const user = await adminmodel.create({ email: "admin@gmail.com", password: "12345" });
     res.send(user);
 });
 

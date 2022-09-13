@@ -7,7 +7,6 @@ export default function Signup() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [avatar, setAvatar] = useState("");
     const navigate = useNavigate();
     const formdata = new FormData();
     return (
@@ -35,31 +34,24 @@ export default function Signup() {
                         <div className="form-text">your password is safe and secure  with us </div>
 
                     </div>
-                    <div className="mb-3">
-                        <label className="form-label" >Select Profile picture</label>
-                        <input type="file" className="form-control" onChange={(event) => {
-                        
-                            setAvatar(event.target.files[0]);
-
-                        }} />
-                    </div>
+                   
 
 
 
                     <button className="btn btn-primary" onClick={(event) => {
-                        // event.preventDefault();
+                        event.preventDefault();
 
-                        formdata.append("name", name);
-                        formdata.append("email", email);
-                        formdata.append("password", password);
-                        formdata.append("avatar", avatar);
                        event.preventDefault();
                         axios
-                            .post("/signup", formdata)
+                            .post("/signup", {
+                                name:name,
+                                email:email,
+                                password:password
+                            })
                             .then((res) => {
-                                console.log(res);
+                                console.log(res.data);
 
-                                navigate("/login");
+                                 navigate("/login");
 
 
                             })
